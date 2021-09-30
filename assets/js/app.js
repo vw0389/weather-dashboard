@@ -1,0 +1,3 @@
+function getDay(city) {
+    
+}
