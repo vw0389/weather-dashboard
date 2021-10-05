@@ -92,7 +92,7 @@ function displayHistory() {
         btn.attr("type", "button");
         $(".history").append(btn);
         $(".historyBtn").click(function () {
-            console.log($(this).text());
+            
             display($(this).text());
         })
     }
