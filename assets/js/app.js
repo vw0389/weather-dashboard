@@ -1,13 +1,19 @@
-var key = "de9e65903924e7323a2e2738fc9a391b"
-var history = {};
+var key = "7099cf0ea7b7028a167ac0d2266d64ca";
+var cityHistory = {};
 // TODO
 // Fix local storage issues, it always gets a dictionary of length 1 from local storage for some reason
 // style the webpage
+
 $(".search").click(async function () {
     var city = $(".textSearch").val().trim();
     var today = new Date();
     if (city) {
         $(".textSearch").val("");
+        var titleCity = toTitleCase(city);
+        if (city in cityHistory) {
+            display(city);
+            return;
+        }
         var weatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + key;
         var firstCall = await get(weatherUrl);
         if (firstCall === 1) {
@@ -33,14 +39,14 @@ $(".search").click(async function () {
         }
         var days = [];
         for (var i = 0; i < 6; i++) {
-            days[i] = {
+            days.push({
                 "date": today.setDate(today.getDate() + 1),
                 "type": secondCall.daily[i].weather[0].main,
                 "temp": secondCall.daily[i].temp.day,
                 "wind": secondCall.daily[i].wind_speed,
                 "humidity": secondCall.daily[i].humidity,
                 "uvi": secondCall.daily[i].uvi,
-            }
+            });
         }
         saveHistory(firstCall.name,days);
         loadHistory();
@@ -67,21 +73,33 @@ async function get(url) {
 }
 // save history to localstorage
 function saveHistory(cityName, days){
-    history[cityName] = days;
-    localStorage.setItem('weather_history', JSON.stringify(history));
+    cityHistory[cityName] = days;
+    localStorage.setItem('weatherHistory', JSON.stringify(cityHistory));
     
 }
 // load history from localstorage
-function loadHistory () {
-    var json_string = localStorage.getItem('weather_history');
-    
+ function loadHistory () {
+    var json_string = localStorage.getItem('weatherHistory');
     if (json_string) {
-        history = JSON.parse(json_string);
+        cityHistory = JSON.parse(json_string);
+    }
+}
+function displayHistory() {
+    $(".history").empty();
+    for (var Key in cityHistory) {
+        var btn = $("<button></button>").text(Key);
+        btn.attr("class","historyBtn");
+        btn.attr("type", "button");
+        $(".history").append(btn);
+        $(".historyBtn").click(function () {
+            console.log($(this).text());
+            display($(this).text());
+        })
     }
 }
 
 function display(city) {
-    var days = history[city];
+    var days = cityHistory[city];
     var today = new Date(days[0].date);
 
     $(".city-stats").empty();
@@ -138,6 +156,12 @@ function display(city) {
         div.append(dateEl,type,temp,wind,humidity);
         $(".5-day-forecast").append(div);
     }
+    displayHistory();
 }
-
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
 loadHistory();
+displayHistory();
