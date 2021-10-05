@@ -2,3 +2,18 @@
     text-align: center;
     padding-top: 20px;
 }
+.history {
+    overflow: hidden;
+    padding: 10px;
+}
+.history > button {
+    margin: 5px;
+}
+.fiveDayForecast {
+    font-size: 0.9rem;
+}
+.fiveDayForecast > div{
+    display: inline-block;
+    margin: 10px;
+}
+

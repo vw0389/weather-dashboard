@@ -103,9 +103,9 @@ function display(city) {
     var today = new Date(days[0].date);
 
     $(".city-stats").empty();
-    $(".5-day-forecast").empty();
+    $(".fiveDayForecast").empty();
     if (days[0].type === 'Rain') {
-        var span = $("<i></i>").attr("class", "fas fa-cloud-rain fa-2x");
+        var span = $("<i></i>").attr("class", "fas fa-cloud-rain");
     } else if (days[0].type === 'Clear') {
         var span = $("<i></i>").attr("class", "fas fa-sun");
     } else if (days[0].type === 'Clouds') {
@@ -123,19 +123,19 @@ function display(city) {
     } else {
         var color = "red"
     }
-    var cityNameDate = $("<h3></h3>").text(city + " (" + today.toISOString().substring(0,10) + ")");
+    var cityNameDate = $("<h3></h3>").text(city + " (" + today.toISOString().substring(0,10) + ") ");
     span.appendTo(cityNameDate);
     var temp = $("<p></p>").text("Temp: " + days[0].temp + " °F");
     var wind = $("<p></p>").text("Wind: " + days[0].wind + " MPH");
     var humidity = $("<p></p>").text("Humidity: " + days[0].humidity + " %");
     var uv = $("<p></p>").text("UV Index: " + days[0].uvi);
-    uv.attr("style", "background-color:" + color);
+    uv.attr("style", "background-color:" + color + ";display:inline-block;border-radius:5px;");
     $(".city-stats").append(cityNameDate,temp,wind,humidity,uv);
     var fiveDayForecast = $("<h3></h3>").text("5-day forecast:")
-    $(".5-day-forecast").append(fiveDayForecast);
+    $(".fiveDayForecast").append(fiveDayForecast);
     for ( var i = 1; i < 6; i++) {
         if (days[i].type === 'Rain') {
-            var span = $("<i></i>").attr("class", "fas fa-cloud-rain fa-2x");
+            var span = $("<i></i>").attr("class", "fas fa-cloud-rain ");
         } else if (days[i].type === 'Clear') {
             var span = $("<i></i>").attr("class", "fas fa-sun");
         } else if (days[i].type === 'Clouds') {
@@ -154,7 +154,7 @@ function display(city) {
         var wind = $("<p></p>").text("Wind: " + days[i].wind + " MPH");
         var humidity = $("<p></p>").text("Humidity: " + days[i].humidity + " %");
         div.append(dateEl,type,temp,wind,humidity);
-        $(".5-day-forecast").append(div);
+        $(".fiveDayForecast").append(div);
     }
     displayHistory();
 }
